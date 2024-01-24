@@ -17,6 +17,30 @@ from protocol_methods import clean_data_local
 from drive_api_upload import upload_basic
 from drive_api_folder import get_folder, clean_data_drive
 
+# Initialize the ConfigParser
+config = configparser.ConfigParser()
+
+# Read the ini file
+config.read('exambot.ini')
+
+# Access the values
+excel_ID = config['google_ID']['spreadsheet_ID']
+parent_folder_ID = config['google_ID']['parent_folder_ID']
+filepath = config['filepath']['filepath_local']
+
+
+# delete old log files
+full_path = os.path.join(filepath, '*.txt')
+files_to_delete = glob.glob(full_path)
+
+# Iterate over the list of files and delete each one
+for file_path in files_to_delete:
+    try:
+        os.remove(file_path)
+        print(f'Successfully deleted: {file_path}')
+    except Exception as e:
+        print(f'Error while deleting file: {file_path}. Reason: {e}')
+
 
 # Initialize logger
 logger = logging.getLogger(__name__)
@@ -37,18 +61,6 @@ logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
 
-# Initialize the ConfigParser
-config = configparser.ConfigParser()
-
-# Read the ini file
-config.read('exambot.ini')
-
-# Access the values
-excel_ID = config['google_ID']['spreadsheet_ID']
-parent_folder_ID = config['google_ID']['parent_folder_ID']
-filepath = config['filepath']['filepath_local']
-
-
 def exambot(path, protocols_filename, folder_pdf='Protocol_PDF', folder_tex='Protocol_Latex'):
     """
     Executes all functions needed to generate protocols from the data in the shared Google Drive.
@@ -66,18 +78,16 @@ def exambot(path, protocols_filename, folder_pdf='Protocol_PDF', folder_tex='Pro
     """
 
     # Delete old protocol spreadsheets
-    file_types = ['*.xlsx', '*.txt']
-    for file_type in file_types:
-        full_path = os.path.join(path, file_type)
-        files_to_delete = glob.glob(full_path)
+    full_path = os.path.join(path, '*.xlsx')
+    files_to_delete = glob.glob(full_path)
 
-        # Iterate over the list of files and delete each one
-        for file_path in files_to_delete:
-            try:
-                os.remove(file_path)
-                logger.info(f'Successfully deleted: {file_path}')
-            except Exception as e:
-                logger.error(f'Error while deleting file: {file_path}. Reason: {e}')
+    # Iterate over the list of files and delete each one
+    for file_path in files_to_delete:
+        try:
+            os.remove(file_path)
+            logger.info(f'Successfully deleted: {file_path}')
+        except Exception as e:
+            logger.error(f'Error while deleting file: {file_path}. Reason: {e}')
 
     # get sheet from drive
     export_excel(
