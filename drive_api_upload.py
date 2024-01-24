@@ -1,5 +1,6 @@
 from __future__ import print_function
 import os
+import logging
 
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
@@ -7,15 +8,22 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 
 
-def upload_basic(token_path, filepath, filename, parents):
-    # TODO finish docstring
+def upload_basic(logger, token_path, filepath, filename, parents):
     """
     Insert new file from filepath.
-    :param token_path:
-    :param filepath:
-    :param filename:
-    :param parents:
-    :return:
+
+    Parameters
+    ----------
+    logger : logger object
+        logger object from the logging module.
+    token_path : str
+        Path to the folder containing the token.json file.
+    filepath : str
+        Path to the file to be uploaded.
+    filename : str 
+        Name of the file to be uploaded.
+    parents : list
+        List of parent folder IDs.
     """
     SCOPES = ['https://www.googleapis.com/auth/drive']
     creds = Credentials.from_authorized_user_file(os.path.join(token_path, 'token.json'), SCOPES)
@@ -31,12 +39,8 @@ def upload_basic(token_path, filepath, filename, parents):
         # pylint: disable=maybe-no-member
         file = service.files().create(body=file_metadata, media_body=media,
                                       fields='id').execute()
-        print(f'{filename} upload successful! File ID: {file.get("id")}')
+        logger.info(f'{filename} upload successful! File ID: {file.get("id")}')
 
     except HttpError as error:
-        print(F'An error occurred: {error}')
+        logger.error(F'An error occurred: {error}')
         file = None
-
-
-# if __name__ == '__main__':
-#    upload_basic(token_path=r'C:\Users\cdhgn\Documents\ETH Zürich\QEC\Exambot')

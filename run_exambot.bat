@@ -1,1 +1,0 @@
-"C:\Users\cdhgn\AppData\Local\Programs\Python\Python310\python.exe" "C:\Users\cdhgn\Documents\ETH Zürich\QEC\Exambot\exambot.py" pause
