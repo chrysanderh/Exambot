@@ -234,8 +234,3 @@ class DocumentGenerator:
                                       f"{datetime.now().year}_{datetime.now().strftime('%m')}_{datetime.now().strftime('%d')}_{subject}"),
                          clean_tex=True, compiler='pdflatex')
         print(f'PDF for {subject} generated!')
-
-# if __name__ == '__main__':
-#    path = 'C:/Users/cdhgn/Documents/ETH Zürich/QEC/Exambot'
-#    filename = f"{datetime.now().year}_{datetime.now().strftime('%m')}_protocols.xlsx"
-#    generate_all_protocols(os.path.join(path, filename))

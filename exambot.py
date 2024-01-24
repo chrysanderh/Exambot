@@ -24,22 +24,33 @@ logging.basicConfig(filename=f"{datetime.now().year}_{datetime.now().strftime('%
 
 
 def exambot(path, protocols_filename, folder_pdf='Protocol_PDF', folder_tex='Protocol_Latex'):
+    # get sheet from drive
     export_excel(path=path,
                  filename=protocols_filename,
-                 real_file_id='1AxfeWr3aFOb-QHDkZBvvUaP2NrxmOyBCXfyQ3MqHh4k')  # get sheet from drive
+                 real_file_id='1AxfeWr3aFOb-QHDkZBvvUaP2NrxmOyBCXfyQ3MqHh4k')
     logging.info(f"{protocols_filename} downloaded. Saved at {path}.")
-    pdf_gen = DocumentGenerator(path, protocols_filename, folder_pdf, folder_tex)  # create instance
-    clean_data_local(pdf_gen.folder_path_pdf)                   # remove all PDFs
-    clean_data_local(pdf_gen.folder_path_tex)                   # remove all Tex files
-    pdf_gen.generate_all_protocols()                            # generate all protocols
-    folder_id = get_folder(path=path, folder_name=folder_pdf)   # get drive folder ID
-    clean_data_drive(path, folder_id)                           # delete all files in respective drive folder
+
+    # create instance of DocumentGenerator
+    pdf_gen = DocumentGenerator(path, protocols_filename, folder_pdf, folder_tex)  
+    
+    # clean data
+    clean_data_local(pdf_gen.folder_path_pdf)
+    clean_data_local(pdf_gen.folder_path_tex)
+
+    # generate all protocols
+    pdf_gen.generate_all_protocols()
+
+    # get drive folder ID
+    folder_id = get_folder(path=path, folder_name=folder_pdf)
+
+    # delete all files in respective drive folder
+    clean_data_drive(path, folder_id)
     for file in os.listdir(pdf_gen.folder_path_pdf):
         upload_basic(path, pdf_gen.folder_path_pdf, file, folder_id)
 
 
 if __name__ == '__main__':
     # TODO replace with your filepath
-    path = 'C:/Users/cdhgn/Documents/ETH Zürich/QEC/Exambot'
+    path = '/Users/chrysanderhagen/My Drive/ETH_Zurich/QEC/Exambot'
     protocols_filename = f"{datetime.now().year}_{datetime.now().strftime('%m')}_{datetime.now().strftime('%d')}_protocols.xlsx"
     exambot(path=path, protocols_filename=protocols_filename)
