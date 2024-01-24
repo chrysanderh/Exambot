@@ -1,1 +1,0 @@
-2023-09-03 12:30:06: file_cache is only supported with oauth2client<4.0.0
