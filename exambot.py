@@ -66,16 +66,18 @@ def exambot(path, protocols_filename, folder_pdf='Protocol_PDF', folder_tex='Pro
     """
 
     # Delete old protocol spreadsheets
-    full_path = os.path.join(path, '*.xlsx')
-    files_to_delete = glob.glob(full_path)
+    file_types = ['*.xlsx', '*.txt']
+    for file_type in file_types:
+        full_path = os.path.join(path, file_type)
+        files_to_delete = glob.glob(full_path)
 
-    # Iterate over the list of files and delete each one
-    for file_path in files_to_delete:
-        try:
-            os.remove(file_path)
-            logger.info(f'Successfully deleted: {file_path}')
-        except Exception as e:
-            logger.error(f'Error while deleting file: {file_path}. Reason: {e}')
+        # Iterate over the list of files and delete each one
+        for file_path in files_to_delete:
+            try:
+                os.remove(file_path)
+                logger.info(f'Successfully deleted: {file_path}')
+            except Exception as e:
+                logger.error(f'Error while deleting file: {file_path}. Reason: {e}')
 
     # get sheet from drive
     export_excel(
