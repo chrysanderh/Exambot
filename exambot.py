@@ -29,7 +29,6 @@ parent_folder_ID = config['google_ID']['parent_folder_ID']
 filepath = config['filepath']['filepath_local']
 
 
-
 # delete old log files
 full_path = os.path.join(filepath, '*.txt')
 files_to_delete = glob.glob(full_path)
