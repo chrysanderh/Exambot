@@ -17,8 +17,8 @@ def clean_data_local(logger, folder_path):
     """
     for file in os.listdir(folder_path):
         os.remove(os.path.join(folder_path, file))
-        logger.info(f"{file} deleted.")
-    logger.info(f"Local folder {folder_path} cleaned.")
+        logger.info(f"Deleted {file}")
+    logger.info(f"Cleaned local folder {folder_path} ")
 
 def filter_string(text):
     """

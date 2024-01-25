@@ -197,4 +197,4 @@ class DocumentGenerator:
         doc.generate_pdf(os.path.join(self.folder_path_pdf,
                                       f"{datetime.now().year}{datetime.now().strftime('%m')}{datetime.now().strftime('%d')}_{subject}"),
                          clean_tex=True, compiler='pdflatex')
-        self.logger.info(f'PDF for {subject} generated!')
+        self.logger.info(f'PDF generated for {subject}.')

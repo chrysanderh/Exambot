@@ -3,6 +3,7 @@ from __future__ import print_function
 import io
 import os
 import glob
+import shutil
 import logging
 import configparser
 from datetime import datetime
@@ -29,17 +30,20 @@ parent_folder_ID = config['google_ID']['parent_folder_ID']
 filepath = config['filepath']['filepath_local']
 
 
-# delete old log files
+# move old log files to archive
 full_path = os.path.join(filepath, '*.txt')
-files_to_delete = glob.glob(full_path)
+files_to_transfer = glob.glob(full_path)
 
-# Iterate over the list of files and delete each one
-for file_path in files_to_delete:
+logger_path = os.path.join(filepath, 'Logger_archive')
+if not os.path.isdir(logger_path):
+    os.mkdir(logger_path)
+
+for file_path in files_to_transfer:
     try:
-        os.remove(file_path)
-        print(f'Successfully deleted: {file_path}')
+        shutil.move(file_path, logger_path)
+        print(f'Successfully moved: {file_path}')
     except Exception as e:
-        print(f'Error while deleting file: {file_path}. Reason: {e}')
+        print(f'Error while moving file: {file_path}. Reason: {e}')
 
 
 # Initialize logger
@@ -96,24 +100,27 @@ def exambot(path, protocols_filename, folder_pdf='Protocol_PDF', folder_tex='Pro
         filename=protocols_filename,
         real_file_id=excel_ID
     )
-    logger.info(f"{protocols_filename} downloaded. Saved at {path}.")
 
     # create instance of DocumentGenerator
     pdf_gen = DocumentGenerator(logger, path, protocols_filename, folder_pdf, folder_tex)  
     
     # clean data
+    logger.info(f"Cleaning data...")
     clean_data_local(logger, pdf_gen.folder_path_pdf)
     clean_data_local(logger, pdf_gen.folder_path_tex)
     logger.info(f"Data cleaned.")
 
     # generate all protocols
+    logger.info(f"Generating protocols...")
     pdf_gen.generate_all_protocols()
     logger.info(f"Protocols generated.")
     
     # delete all files in respective drive folder
     folder_id = get_folder(logger, path=path, folder_name=folder_pdf, parent_folder_id=parent_folder_ID)
+    logger.info(f"Deleting old remotely stored PDF protocols...")
     clean_data_drive(logger, path, folder_id)
     logger.info(f"Old PDF protocols deleted.")
+    logger.info(f"Uploading PDF protocols...")
     for file in os.listdir(pdf_gen.folder_path_pdf):
         upload_basic(logger, path, pdf_gen.folder_path_pdf, file, folder_id)
     logger.info(f"PDF protocols uploaded.")

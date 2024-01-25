@@ -45,4 +45,4 @@ def export_excel(logger, path, filename, real_file_id):
 
     with open(os.path.join(path, filename), 'wb') as output_file:
         output_file.write(file.getvalue())
-    logger.info(f'{filename} downloaded at {path}!')
+    logger.info(f'{filename} downloaded at {path}')

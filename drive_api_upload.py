@@ -39,7 +39,7 @@ def upload_basic(logger, token_path, filepath, filename, parents):
         # pylint: disable=maybe-no-member
         file = service.files().create(body=file_metadata, media_body=media,
                                       fields='id').execute()
-        logger.info(f'{filename} upload successful! File ID: {file.get("id")}')
+        logger.info(f'Successful upload of {filename}')
 
     except HttpError as error:
         logger.error(F'An error occurred: {error}')
