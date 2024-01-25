@@ -6,3 +6,4 @@
 *.xlsx
 *.pyc
 __pycache__/
+sandbox.py
