@@ -113,6 +113,7 @@ def exambot(path, protocols_filename, folder_pdf='Protocol_PDF', folder_tex='Pro
     # delete all files in respective drive folder
     folder_id = get_folder(logger, path=path, folder_name=folder_pdf, parent_folder_id=parent_folder_ID)
     clean_data_drive(logger, path, folder_id)
+    logger.info(f"Old PDF protocols deleted.")
     for file in os.listdir(pdf_gen.folder_path_pdf):
         upload_basic(logger, path, pdf_gen.folder_path_pdf, file, folder_id)
     logger.info(f"PDF protocols uploaded.")
