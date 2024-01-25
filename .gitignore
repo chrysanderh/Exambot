@@ -5,3 +5,4 @@
 *.ini
 *.xlsx
 *.pyc
+__pycache__/
