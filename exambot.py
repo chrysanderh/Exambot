@@ -101,6 +101,14 @@ def exambot(path, protocols_filename, folder_pdf='Protocol_PDF', folder_tex='Pro
         real_file_id=excel_ID
     )
 
+    # Create folders if they don't exist
+    if not os.path.isdir(folder_pdf):
+        os.mkdir(folder_pdf)
+        logger.info(f"Created local folder {folder_pdf}")
+    if not os.path.isdir(folder_tex):
+        os.mkdir(folder_tex)
+        logger.info(f"Created local folder {folder_tex}")
+
     # create instance of DocumentGenerator
     pdf_gen = DocumentGenerator(logger, path, protocols_filename, folder_pdf, folder_tex)  
     
@@ -119,11 +127,11 @@ def exambot(path, protocols_filename, folder_pdf='Protocol_PDF', folder_tex='Pro
     folder_id = get_folder(logger, path=path, folder_name=folder_pdf, parent_folder_id=parent_folder_ID)
     logger.info(f"Deleting old remotely stored PDF protocols...")
     clean_data_drive(logger, path, folder_id)
-    logger.info(f"Old PDF protocols deleted.")
-    logger.info(f"Uploading PDF protocols...")
+    logger.info(f"Old remote PDF protocols deleted.")
+    logger.info(f"Uploading new PDF protocols...")
     for file in os.listdir(pdf_gen.folder_path_pdf):
         upload_basic(logger, path, pdf_gen.folder_path_pdf, file, folder_id)
-    logger.info(f"PDF protocols uploaded.")
+    logger.info(f"New PDF protocols uploaded.")
 
 
 if __name__ == '__main__':
