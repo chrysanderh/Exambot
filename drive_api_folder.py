@@ -83,7 +83,7 @@ def clean_data_drive(logger, token_path, folder_id):
         files = results.get('files', [])
         for file in files:
             service.files().delete(fileId=file['id']).execute()
-            logger.info(f"{file['name']} with ID {file['id']} deleted.")
+            logger.info(f"Deleted {file['name']}.")
 
     except HttpError as error:
         logger.error(F'An error occurred: {error}')

@@ -40,12 +40,6 @@ class DocumentGenerator:
         """
         Generates tex files and compiles to PDF for all subjects and their respective data in a given datasheet
         """
-        # Create folders if they don't exist
-        if not os.path.isdir(self.folder_path_pdf):
-            os.mkdir(self.folder_path_pdf)
-        if not os.path.isdir(self.folder_path_tex):
-            os.mkdir(self.folder_path_tex)
-        
         # need image as watermark in pdf folder
         shutil.copy('2023_04_QEC.png', self.folder_path_pdf) 
 
